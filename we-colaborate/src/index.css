@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+body{
+  background-color: white;
+}
+
+.root{
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
