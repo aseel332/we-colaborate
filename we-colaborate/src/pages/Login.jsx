@@ -17,6 +17,7 @@ export default function Login() {
       await login(email, password);
       // Redirect to home page after successful login
       setIsLoading(false);
+
       navigate("/home");
     } catch (error) {
       alert(error.message);

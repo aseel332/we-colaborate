@@ -11,7 +11,6 @@ function Navbar({navbarOptions, activeNav, setActiveNav}) {
       <div className="flex flex-col items-center space-y-6">
         {navbarOptions && navbarOptions.map((option) => (
           <button key={option.name} className={("text-gray-600 hover:text-blue-600 transition ") + (option.name === activeNav? ("text-blue-600 ") : "")  } onClick={() => {
-            navigate(option.link)
             setActiveNav(option.name);}}>
             {option.name.charAt(0).toUpperCase() + option.name.slice(1)}
           </button>

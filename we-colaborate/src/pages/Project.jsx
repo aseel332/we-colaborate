@@ -2,30 +2,54 @@ import { useEffect, useState } from "react";
 import { apiRequest } from "../../api";
 import { useProject } from "../customHooks/project";
 import { loadBranches } from "../customHooks/loadBranches";
-
+import ProjectDashboard from "../components/ProjectDashboard";
 import CreateBranch from "../components/CreateBranch";
 import Navbar from "../components/Navbar";
-import BranchCard from "../components/BranchCard";
 
-const projectId = window.location.pathname.split('/').pop() || JSON.parse(localStorage.getItem("currentProject"));
 
-export const navbarOptions = [
-    {name: "dasboard", link: `/project/${projectId}`},
-    {name: "tasks", link: `/project/${projectId}/tasks`},
-    {name: "messages", link: `/project/${projectId}/messages`},
-    {name: "files", link: `/project/${projectId}/files`},
-    {name: "members", link: `/project/${projectId}/members`},
-    {name: "settings", link: `/project/${projectId}/settings`},
-];
+import Settings from "../components/ProjectSettings";
+import Members from "../components/ProjectMembers";
+
+
 
 export default function Project() {
 
-  
+  const projectId = window.location.pathname.split('/').pop() || JSON.parse(localStorage.getItem("currentProject"));
   const { project, loading, error } = useProject(projectId);
   const { branches, loading: branchesLoading, error: branchesError } = loadBranches(projectId);
 
+
   const [activeNav, setActiveNav] = useState("dashboard");
   const [isOpen, setIsOpen] = useState(false);
+  
+  const navbarOptions = [
+    {name: "dashboard", },
+    {name: "tasks"},
+    {name: "messages"},
+    {name: "files" },
+    {name: "members" },
+    {name: "settings" },
+];
+
+function renderComponent(activeNav) {
+  switch(activeNav) {
+    case 'dashboard':
+      return <ProjectDashboard project={project} branches={branches} />;
+    case 'tasks':
+      return <div>Tasks Component</div>;
+    case 'messages':
+      return <div>Messages Component</div>;
+    case 'files':
+      return <div>Files Component</div>;
+    case 'members':
+      return <Members project={project} />;
+    case 'settings':
+      return <Settings project={project} />;
+    default:
+      return null;
+  }
+}
+
 
   useEffect(() => {
     document.title = `We-Colaborate | ${project ? project.name : 'Project'}`;
@@ -43,29 +67,8 @@ export default function Project() {
   {isOpen && <CreateBranch />}
   <Navbar navbarOptions={navbarOptions} activeNav={activeNav} setActiveNav={setActiveNav}/>
   <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">
-    <header className="mb-6 flex justify-between">
-      <div className="flex">
-        <button className="mr-4 text-2xl hover:underline" onClick={() => window.history.back()}>⬅️</button>
-      <h1 className="text-3xl font-bold">{project.name}</h1>
-      </div>
-      <div className="flex items-center gap-4">
-        {/*Branch search bar */}
-        <input type="text" placeholder="Search Branches..." className="border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 transition" onClick={() => setIsOpen(true)}>Add Branch</button>
-      </div>
-    </header>
-    <section className="mb-6">
-      <div className="flex justify-between">
-      <h2 className="text-2xl font-semibold mb-4">Your Branches</h2>
-      {/*View all Button */}
-        <button className="text-blue-600 hover:underline">View All</button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {branches && branches.length > 0 ? branches.map((branch) => (
-          <BranchCard key={branch._id} branch={branch} />
-        )) : (<p>No branches available. Create a new branch to get started!</p>)}
-      </div>
-    </section>
+  {renderComponent(activeNav)}
+    
   </div>
   </>
 )

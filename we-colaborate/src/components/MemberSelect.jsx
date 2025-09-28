@@ -2,10 +2,11 @@
 import { useState } from "react";
 import ReactDom from "react-dom";
 
-export default function MemberSelect({project, selectedMembers, setSelectedMembers}) {
+export default function MemberSelect({project, selectedMembers, setSelectedMembers, branch}) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const allMembers = project ? [...project.admin, ...project.members] : [];
+  // If project get members and admins and if branch get members and leader and admin
+  const allMembers = project ? [...project.members, ...project.admin] : branch ? [...branch.members, branch.leader] : [];
 
   const filteredMembers = allMembers.filter(member =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase())

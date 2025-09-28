@@ -5,10 +5,9 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Signup from './pages/Signup'
 import Project from './pages/Project'
 import './App.css'
-import Settings from './pages/Settings'
 import JoinProject from './pages/JoinProject'
-import Members from './pages/Members'
 import Branch from './pages/Branch'
+import TaskView from './pages/TaskView'
 
 function App() {
   return (
@@ -35,28 +34,24 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/project/:id/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          }
-        />
+
         <Route path="/join-project" element={
           <ProtectedRoute>
           <JoinProject />
           </ProtectedRoute>
         } />
-        <Route path="/project/:id/members" element={
-          <ProtectedRoute>
-          <Members />
-          </ProtectedRoute>
-        } />
+      
         <Route path="/project/:id/branch/:branchId" element={
           <ProtectedRoute>
              <Branch />
           </ProtectedRoute>
         } />
+        <Route path="/project/:id/branch/:branchId/task/:taskId" element={
+          <ProtectedRoute>
+            <TaskView />
+          </ProtectedRoute>
+        } />
+        
       </Routes>
     </Router> 
   )

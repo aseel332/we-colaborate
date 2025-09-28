@@ -1,13 +1,10 @@
-import Navbar from "../components/Navbar";
-import { navbarOptions } from "./Project";
-import { useProject } from "../customHooks/project";
+import { useState } from "react";
 
-export default function Settings() {
-  const { project } = useProject(JSON.parse(localStorage.getItem("currentProject")));
+export default function Settings({project}) {
   return (
     <>
-    <Navbar navbarOptions={navbarOptions}/>
-    <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">
+    
+  
       <header className="mb-6 flex justify-between">
         <div className="flex">
           <button className="mr-4 text-2xl hover:underline" onClick={() => window.history.back()}>⬅️</button>
@@ -63,7 +60,7 @@ export default function Settings() {
           <p className="text-sm text-gray-600">Share these links with others to invite them to the project.</p>
         </div>
       </section>
-    </div>
+
   </>
   );
 }

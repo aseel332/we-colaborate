@@ -6,6 +6,8 @@ import CreateProject from "../components/CreateProject";
 import { apiRequest } from "../../api";
 
 export default function Home() {
+  // cannot go back to login page if already logged in
+ 
   const [show, setShow] = useState(false);
   const [projects, setProjects] = useState(null);
   useEffect(() => {
@@ -16,6 +18,9 @@ export default function Home() {
       console.log(projects);
       setProjects(projects);
     } fetchData();
+     if (localStorage.getItem("token")) {
+    window.history.pushState(null, "", "/home");
+  }
   }, [show]);
 
   return (

@@ -1,14 +1,12 @@
-import Navbar from "../components/Navbar"
-import ProfileCircle from "../components/ProfileCircle";
-import { navbarOptions } from "./Project"
+import ProfileCircle from "./ProfileCircle";
 import { useState } from "react"
-import { useProject } from "../customHooks/project";
 
-export default function Members() {
-  const [activeNav, setActiveNav] = useState("members");
+
+export default function Members({project}) {
+  
   const [searchTerm, setSearchTerm] = useState("");
-  const projectId =  JSON.parse(localStorage.getItem("currentProject"));
-  const { project, loading } = useProject(projectId);
+
+
 
   const filteredAdmins = project && project.admin
     ? project.admin.filter(admin =>
@@ -24,8 +22,8 @@ export default function Members() {
 
   return (
     <>
-      <Navbar navbarOptions={navbarOptions} activeNav={activeNav} setActiveNav={setActiveNav}/>
-      <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">
+     
+ 
         <header className="mb-6 flex justify-between">
           <div className="flex justify-between w-full">
             <div className="flex">
@@ -63,6 +61,6 @@ export default function Members() {
             )) : (<p>No members available.</p>)}
           </div>
         </section>
-      </div>
+
     </>
   )} 

@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
     } 
     const token = await apiRequest('/api/auth/login', 'POST', { email, password });
     localStorage.setItem("token", JSON.stringify(token));
+    localStorage.setItem("email", JSON.stringify(email));
     return token;
   };
 
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     } 
     const token = await apiRequest('/api/auth/signup', 'POST', { name, email, password });
     localStorage.setItem("token", JSON.stringify(token) );
+    localStorage.setItem("email", JSON.stringify(email));
     return token;
   };
 
