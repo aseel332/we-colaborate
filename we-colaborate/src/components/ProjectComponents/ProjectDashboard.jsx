@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import CreateBranch from "../components/CreateBranch";
-import Navbar from "../components/Navbar";
-import BranchCard from "../components/BranchCard";
-export default function ProjectDashboard({project, branches}) {
+import CreateBranch from "../BranchComponents/CreateBranch";
+import Navbar from "../ProjectComponents/Navbar";
+import BranchCard from "../BranchComponents/BranchCard";
+export default function ProjectDashboard({project, branches, isAdmin}) {
  
   const [isOpen, setIsOpen] = useState(false);
    
@@ -20,7 +20,7 @@ export default function ProjectDashboard({project, branches}) {
       <div className="flex items-center gap-4">
         {/*Branch search bar */}
         <input type="text" placeholder="Search Branches..." className="border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 transition" onClick={() => setIsOpen(true)}>Add Branch</button>
+        {isAdmin && <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 transition" onClick={() => setIsOpen(true)}>Add Branch</button>}
       </div>
     </header>
     <section className="mb-6">

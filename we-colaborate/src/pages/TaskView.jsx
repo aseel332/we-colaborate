@@ -1,15 +1,19 @@
 import loadTask from "../customHooks/loadTask";
-import Navbar from "../components/Navbar";
-import TaskConversation from "../components/TaskConversation";
+import Navbar from "../components/ProjectComponents/Navbar";
+import TaskConversation from "../components/TaskComponents/TaskConversation";
 import useConversation from "../customHooks/useConversation";
 import { useState } from "react";
-import TaskSubmission from "../components/TaskSubmission";
+import TaskSubmission from "../components/TaskComponents/TaskSubmission";
 export default function TaskView() {
 
   const [activeNav, setActiveNav] = useState("details");
   const taskId = JSON.parse(localStorage.getItem("currentTask"));
+  const email = JSON.parse(localStorage.getItem("email"));
+  
+
 
   const {task, loading, error} = loadTask(taskId);
+  console.log("Loaded Task:", task);
 
   const navBarOptions = [
     {name: "details"},
@@ -21,7 +25,8 @@ export default function TaskView() {
     return <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">Loading...</div>;
   }
 
-
+  const leader_email = task ? task.createdBy.email : null;
+  const isLeader = email === leader_email;
 
   return (
     <>
@@ -32,10 +37,12 @@ export default function TaskView() {
         <button className="mr-4 text-2xl hover:underline" onClick={() => window.history.back()}>⬅️</button>
         <h1 className="text-3xl font-bold">{task.title}</h1>
       </div>
+      {isLeader &&
       <div className="flex space-x-4">
         <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 transition">Edit Task</button>
         <button className="bg-red-600 text-white px-4 py-2 rounded-2xl hover:bg-red-700 transition">Delete Task</button>
       </div>
+  }
     </header>
     <div className="border border-gray-300 rounded-lg p-4 mb-4 shadow-sm hover:shadow-md transition">
       <div className="flex justify-between items-center mb-4">
@@ -47,7 +54,7 @@ export default function TaskView() {
       </div>
       <p className="text-gray-700 mb-6">{task.description}</p>
     </div>
-    <TaskConversation />
+    <TaskConversation taskId={taskId} />
     </div>) : (<div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll"> <TaskSubmission /> </div>) }
     
     

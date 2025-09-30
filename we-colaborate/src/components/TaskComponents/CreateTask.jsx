@@ -1,8 +1,8 @@
 import ReactDom from 'react-dom';
 import { useState } from 'react';
-import MemberSelect from './MemberSelect';
-import { useBranch } from '../customHooks/useBranch';
-import { apiRequest } from '../../api';
+import MemberSelect from '../ProjectComponents/MemberSelect';
+import { useBranch } from '../../customHooks/useBranch';
+import { apiRequest } from '../../../api';
 export default function CreateTask({ show, onClose }) {
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');

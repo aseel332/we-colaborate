@@ -2,23 +2,34 @@ import ProfileCircle from "./ProfileCircle";
 import { useState } from "react"
 
 
-export default function Members({project}) {
+export default function Members({project = null, branch = null}) {
   
   const [searchTerm, setSearchTerm] = useState("");
+  let filteredAdmins = [];
+  let filteredMembers = [];
 
-
-
-  const filteredAdmins = project && project.admin
+  if(project) {
+   filteredAdmins = project && project.admin
     ? project.admin.filter(admin =>
         admin.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
 
-  const filteredMembers = project && project.members
+   filteredMembers = project && project.members
     ? project.members.filter(member =>
         member.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
+  } else if (branch) {
+    filteredAdmins = branch && branch.leader.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ? [branch.leader]
+      : [];
+    filteredMembers = branch && branch.members
+      ? branch.members.filter(member =>
+          member.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : [];
+  }
 
   return (
     <>

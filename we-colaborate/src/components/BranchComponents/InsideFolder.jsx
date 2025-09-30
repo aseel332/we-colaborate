@@ -1,5 +1,5 @@
-import loadFiles from "../customHooks/loadFiles";
-import FileViewCard from "./fileViewCard";
+import loadFiles from "../../customHooks/loadFiles";
+import FileViewCard from "./FileViewCard";
 import { useState } from "react";
 import FileUploadModal from "./FileUploadModal";
 

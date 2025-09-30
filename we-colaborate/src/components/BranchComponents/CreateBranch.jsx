@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { apiRequest } from "../../api"
+import { apiRequest } from "../../../api"
 import ReactDom from "react-dom"
-import { useProject } from "../customHooks/project"
-import MemberSelect from "./MemberSelect"
+import { useProject } from "../../customHooks/project"
+import MemberSelect from "../ProjectComponents/MemberSelect"
 export default  function CreateBranch(){
   // Modal for creating a branch. Components: Name, Description, leader (select from the memebrs and admins of the project), members (multi select from the members and admins of the project) and a create button
   const [name, setName] = useState("")

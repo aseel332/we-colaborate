@@ -1,9 +1,9 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/ProjectComponents/Navbar";
 import { branchNavbarOptions } from "./Branch";
 import { useState } from "react";
-import CreateTask from "../components/CreateTask";
+import CreateTask from "../components/TaskComponents/CreateTask";
 import useTask from "../customHooks/useTask";
-import TaskListCard from "../components/TaskListCard";
+import TaskListCard from "../components/TaskComponents/TaskListCard";
 
 export default function Task({tasks}) {
   const [activeNav, setActiveNav] = useState("tasks");
