@@ -4,8 +4,8 @@ import { apiRequest } from "../../../api";
 import { useProject } from "../../customHooks/project";
 import MemberSelect from "../ProjectComponents/MemberSelect";
 
-export default function MembersModify( {task, onClose} ) {
-  const members = task?.assignedTo || [];
+export default function MembersModify( {task, onClose, branch} ) {
+  const members = task? task?.assignedTo || [] : branch ? branch?.members || [] : [];
   const projectId = JSON.parse(localStorage.getItem("currentProject"));
   const branchId = JSON.parse(localStorage.getItem("currentBranch"));
   const taskId = task?._id;
@@ -16,15 +16,23 @@ export default function MembersModify( {task, onClose} ) {
     return ReactDom.createPortal(<div>Loading...</div>, document.getElementById('portal'));
   }
 
+  function getUrl() {
+    if (task) {
+      return `/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}`;
+    } else if (branch) {
+      return `/api/projects/${projectId}/branches/${branchId}`;
+    }
+  }
+
   async function handleAddMember() {
-    const response = await apiRequest(`/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}/add-members`, 'POST', {
+    const response = await apiRequest(`${getUrl()}/add-members`, 'PUT', {
       memberIds: selectedMembers
     }, JSON.parse(localStorage.getItem('token')).token);
    console.log(response);
   }
 
   async function handleRemoveMember(memberId) {
-    const response = await apiRequest(`/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}/remove-member`, 'POST', {
+    const response = await apiRequest(`${getUrl()}/remove-member`, 'PUT', {
       memberId
     }, JSON.parse(localStorage.getItem('token')).token);
    console.log(response);

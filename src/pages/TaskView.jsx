@@ -39,8 +39,12 @@ export default function TaskView() {
   }
 
   async function handleDelete() {
+    if (!window.confirm("Are you sure you want to delete this task? This action cannot be undone.")) {
+      return;
+    }
     const response = await apiRequest(`/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}`, 'DELETE', {}, JSON.parse(localStorage.getItem('token')).token);
     console.log(response);
+    window.history.back();
   }
 
   function TaskDetails() {

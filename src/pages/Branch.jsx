@@ -8,6 +8,7 @@ import Task from "./Task";
 import Files from "../components/BranchComponents/Files";
 import TaskConversation from "../components/TaskComponents/TaskConversation";
 import ProjectMembers from "../components/ProjectComponents/ProjectMembers";
+import BranchSettings from "../components/BranchComponents/BranchSettings";
 
 const projectId = JSON.parse(localStorage.getItem("currentProject"));
 const branchId = JSON.parse(localStorage.getItem("currentBranch"));
@@ -50,6 +51,8 @@ export default function Branch() {
       return <TaskConversation branchId={branchId} />;
     case 'members':
       return <ProjectMembers branch={branch} />;
+    case 'settings':
+      return isAdmin ? <BranchSettings Branch={branch} /> : <div>You do not have permission to view this page.</div>;
     // case 'messages':
     //   return <Messages branchId={branchId} />;
   }
