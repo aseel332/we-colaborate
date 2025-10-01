@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import ProjectCard from "../components/ProjectCard";
+import Navbar from "../components/ProjectComponents/Navbar";
+import ProjectCard from "../components/ProjectComponents/ProjectCard";
 import SearchBar from "../components/SearchBar";
-import CreateProject from "../components/CreateProject";
+import CreateProject from "../components/ProjectComponents/CreateProject";
 import { apiRequest } from "../../api";
 
 export default function Home() {

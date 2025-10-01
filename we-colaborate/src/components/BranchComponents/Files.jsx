@@ -1,10 +1,10 @@
 import { useState } from "react";
 import FileUploadModal from "./FileUploadModal";
-import loadFiles from "../customHooks/loadFiles";
-import FileViewCard from "./fileViewCard";
+import loadFiles from "../../customHooks/loadFiles";
+import FileViewCard from "./FileViewCard";
 import CreateFolderModal from "./CreateFolderModal";
 import InsideFolder from "./InsideFolder";
-import loadFolders from "../customHooks/loadFolders";
+import loadFolders from "../../customHooks/loadFolders";
 
 export default function Files(){
   const [uploadModalOpen, setUploadModalOpen] = useState(false);

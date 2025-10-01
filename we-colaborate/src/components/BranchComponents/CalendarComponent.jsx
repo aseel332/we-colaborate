@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { formatDateForCalendar, combineDueDateTime, getStartTime } from "../utils/date";
+import { formatDateForCalendar, combineDueDateTime, getStartTime } from "../../utils/date";
 
 export default function CalendarComponent({tasks}) {
   console.log("Tasks received:", tasks);

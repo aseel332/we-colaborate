@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import { apiRequest } from '../../api';
+import { apiRequest } from '../../../api';
 import { useState } from 'react';
 
 export default function FileUploadModal({ isOpen, onClose, branchId = null, folderId = null, taskId = null }) {

@@ -1,9 +1,21 @@
-import useConversation from "../customHooks/useConversation";
-import { getTimeFromDate } from "../utils/date";
-export default function TaskConversation(){
-  const taskId = JSON.parse(localStorage.getItem("currentTask"));
+import useConversation from "../../customHooks/useConversation";
+import useConversationBranch from "../../customHooks/useConversationBranch";
+import { getTimeFromDate } from "../../utils/date";
+export default function TaskConversation( {taskId = null, branchId = null,} ) {
+
   const email = JSON.parse(localStorage.getItem("email"));
-  const {conversations, loading, error, addConversation} = useConversation(taskId);
+  let {conversations, loading, error, addConversation} = {};
+  if (taskId) {
+    console.log("Task ID:", taskId);
+    ({conversations, loading, error, addConversation} = useConversation(taskId));
+  } else if (branchId) {
+    console.log("Branch ID:", branchId);
+    ({conversations, loading, error, addConversation} = useConversationBranch(branchId));
+    console.log(conversations);
+  }
+  if (loading) {
+    return <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">Loading...</div>;
+  }
   function sentMessageFormatter(message, timestamp) {
     // Display messages sent by the user on the right side starting from the bottom that is already verified
     // Display Me and below it the content of the message and then below it the timestamp

@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { apiRequest } from "../../api";
 import { useProject } from "../customHooks/project";
 import { loadBranches } from "../customHooks/loadBranches";
-import ProjectDashboard from "../components/ProjectDashboard";
-import CreateBranch from "../components/CreateBranch";
-import Navbar from "../components/Navbar";
-
-
-import Settings from "../components/ProjectSettings";
-import Members from "../components/ProjectMembers";
+import ProjectDashboard from "../components/ProjectComponents/ProjectDashboard";
+import CreateBranch from "../components/BranchComponents/CreateBranch";
+import Navbar from "../components/ProjectComponents/Navbar";
+import Settings from "../components/ProjectComponents/ProjectSettings";
+import Members from "../components/ProjectComponents/ProjectMembers";
 
 
 
@@ -17,7 +15,9 @@ export default function Project() {
   const projectId = window.location.pathname.split('/').pop() || JSON.parse(localStorage.getItem("currentProject"));
   const { project, loading, error } = useProject(projectId);
   const { branches, loading: branchesLoading, error: branchesError } = loadBranches(projectId);
-
+  const email = JSON.parse(localStorage.getItem("email"));
+  const adminEmails = project ? project.admin.map(admin => admin.email) : [];
+  const isAdmin = adminEmails.includes(email);
 
   const [activeNav, setActiveNav] = useState("dashboard");
   const [isOpen, setIsOpen] = useState(false);
@@ -25,16 +25,13 @@ export default function Project() {
   const navbarOptions = [
     {name: "dashboard", },
     {name: "tasks"},
-    {name: "messages"},
-    {name: "files" },
-    {name: "members" },
-    {name: "settings" },
+    {name: "settings", admin: true},
 ];
 
 function renderComponent(activeNav) {
   switch(activeNav) {
     case 'dashboard':
-      return <ProjectDashboard project={project} branches={branches} />;
+      return <ProjectDashboard project={project} branches={branches} isAdmin={isAdmin} />;
     case 'tasks':
       return <div>Tasks Component</div>;
     case 'messages':
@@ -61,11 +58,14 @@ function renderComponent(activeNav) {
   if (loading || branchesLoading) {
     return <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">Loading...</div>; 
   }
+
+  
+
   return (
 
     <>
   {isOpen && <CreateBranch />}
-  <Navbar navbarOptions={navbarOptions} activeNav={activeNav} setActiveNav={setActiveNav}/>
+  <Navbar navbarOptions={navbarOptions} activeNav={activeNav} setActiveNav={setActiveNav} isAdmin={isAdmin} />
   <div className="w-[95%] h-[100vh] px-6 py-5 overflow-y-scroll">
   {renderComponent(activeNav)}
     

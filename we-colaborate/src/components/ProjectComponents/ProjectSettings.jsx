@@ -1,6 +1,25 @@
 import { useState } from "react";
+import { apiRequest } from "../../../api";
+
 
 export default function Settings({project}) {
+
+  const projectId = JSON.parse(localStorage.getItem("currentProject"));
+  const token = JSON.parse(localStorage.getItem("token")).token;
+
+  async function handleSaveChanges() {
+    const name = document.getElementById("projectName").value;
+    const description = document.getElementById("projectDescription").value;
+    const privacy = document.getElementById("projectPrivacy").value;
+    const response = await apiRequest(`/api/projects/${projectId}`, 'PUT', {
+      name,
+      description,
+    }, token);
+    console.log(response);
+    window.location.reload();
+    
+  }
+
   return (
     <>
     
@@ -16,20 +35,20 @@ export default function Settings({project}) {
         <div className="bg-white p-6 rounded-2xl shadow-md">
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">Project Name</label>
-            <input type="text" defaultValue={project ? project.name : ''} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <input id="projectName" type="text" defaultValue={project ? project.name : ''} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">Description</label>
-            <textarea defaultValue={project ? project.description : ''} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4"></textarea>
+            <textarea id="projectDescription" defaultValue={project ? project.description : ''} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4"></textarea>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">Privacy</label>
-            <select defaultValue={project ? project.privacy : 'public'} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <select id="projectPrivacy" defaultValue={project ? project.privacy : 'public'} className="w-full border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
           </div>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-2xl hover:bg-green-700 transition">Save Changes</button>
+          <button className="bg-green-600 text-white px-4 py-2 rounded-2xl hover:bg-green-700 transition" onClick={handleSaveChanges}>Save Changes</button>
         </div>
       </section>
       <section className="mt-8">

@@ -1,40 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
 import { apiRequest } from '../../api';
 import { io } from 'socket.io-client';
-
-export default function useConversation(taskId) {
+export default function useConversationBranch(branchId) {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const branchId = JSON.parse(localStorage.getItem("currentBranch"));
   const projectId = JSON.parse(localStorage.getItem("currentProject"));
 
   // Keep socket instance persistent
   const socketRef = useRef(null);
-
   // Fetch initial conversations
   useEffect(() => {
+    console.log("Branch ID in hook:", branchId);
     const fetchConversations = async () => {
+      console.log("Fetching conversations for branch:", branchId);
       try {
         const token = JSON.parse(localStorage.getItem('token')).token;
         const response = await apiRequest(
-          `/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}/conversation`,
+          `/api/projects/${projectId}/branches/${branchId}/conversation`,
           'GET',
           null,
           token
         );
-        console.log(response.messages);
-        setConversations(response.messages);
-      } catch (err) {
-        setError(err);
+        console.log("Conversation : ",response[0]);
+        setConversations(response[0].messages);
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+        setError(error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchConversations();
-  }, [taskId, branchId, projectId]);
+  }, [branchId, projectId]);
+
 
   // Socket connection
   useEffect(() => {
@@ -42,45 +41,36 @@ export default function useConversation(taskId) {
     socketRef.current = io('http://localhost:5000', {
       transports: ['websocket', 'polling'],
     });
-
     const socket = socketRef.current;
-
-    // Join the conversation room
-    socket.emit('joinConversation', taskId);
-
+    // Join the branch room
+    socket.emit('joinBranch', branchId);
     // Listen for new messages
-    socket.on('chat:newMessage', (message) => {
-      
-        console.log("Received message:", message);
-        setConversations(prev => [...prev, message]);
-      
+    socket.on('chat:newBranchMessage', (message) => {
+      console.log("Received message:", message);
+      setConversations(prev => [...prev, message]);
     });
-
     return () => {
       // Leave the room and disconnect on cleanup
-      socket.emit('leaveConversation', taskId);
+      socket.emit('leaveBranch', branchId);
       socket.disconnect();
     };
-  }, [taskId]);
+  }, [branchId]);
 
-  // Send message via API
-  const addConversation = async (newConversation) => {
-    // Optimistic update
-    
+  // Function to add a new conversation message
+  async function addConversation(content) {
     try {
       const token = JSON.parse(localStorage.getItem('token')).token;
       const response = await apiRequest(
-        `/api/projects/${projectId}/branches/${branchId}/tasks/${taskId}/conversation`,
+        `/api/projects/${projectId}/branches/${branchId}/conversation`,
         'POST',
-        { content: newConversation.content },
+        { content: content.content },
         token
       );
       return response;
-    } catch (err) {
-      setError(err);
-      console.error(err);
+    } catch (error) {
+      setError(error);
     }
-  };
+  }
 
   return { conversations, loading, error, addConversation };
 }
